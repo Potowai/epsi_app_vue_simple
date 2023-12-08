@@ -2,58 +2,130 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LinkedIn API Example</title>
+  <title>Vue.js API Example</title>
+  <!-- Include Vue.js and Axios -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    #app {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0 15px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: #fff;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    div {
+      margin-top: 20px;
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    p {
+      margin: 10px 0;
+    }
+
+    strong {
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-  <div id="app">
-    <h1>LinkedIn API Example</h1>
-    <button @click="fetchLinkedInProfile">Fetch LinkedIn Profile</button>
-    <div v-if="profile">
-      <h2>LinkedIn Profile</h2>
-      <p><strong>Name:</strong> {{ profile.localizedFirstName }} {{ profile.localizedLastName }}</p>
-      <p><strong>Headline:</strong> {{ profile.headline }}</p>
-      <p><strong>Location:</strong> {{ profile.location.name }}</p>
-      <!-- Add more fields as needed -->
-    </div>
-    <div v-if="error">
-      <p style="color: red;">Error fetching LinkedIn profile: {{ error }}</p>
-    </div>
+
+<div id="app">
+  <h1>ZIP Code Information</h1>
+  <label for="countryInput">Enter Country name:</label>
+  <input type="text" v-model="countryCode" id="countryInput">
+  <label for="zipCodeInput">Enter ZIP Code:</label>
+  <input type="text" v-model="zipCode" id="zipCodeInput">
+  <button @click="getZipCodeInfo">Get Info</button>
+
+  <div v-if="zipCodeInfo">
+    <h2>Result:</h2>
+    <p><strong>Country:</strong> {{ zipCodeInfo.country }}</p>
+    <p><strong>State:</strong> {{ zipCodeInfo.state }}</p>
+    <p><strong>City:</strong> {{ zipCodeInfo.city }}</p>
+    <p><strong>Latitude:</strong> {{ zipCodeInfo.latitude }}</p>
+    <p><strong>Longitude:</strong> {{ zipCodeInfo.longitude }}</p>
   </div>
+</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
-  <script>
-    // Importez le client LinkedIn API
-    const { RestliClient } = require('linkedin-api-client');
+<script>
+new Vue({
+  el: '#app',
+  data: {
+    countryCode: '',
+    zipCode: '',
+    zipCodeInfo: null
+  },
+  methods: {
+    getZipCodeInfo() {
+      const apiUrl = `http://api.zippopotam.us/${this.countryCode}/${this.zipCode}`;
+      
+      axios.get(apiUrl)
+        .then(response => {
+          this.zipCodeInfo = {
+            country: response.data.country,
+            state: response.data.places[0].state,
+            city: response.data.places[0]['place name'],
+            latitude: response.data.places[0].latitude,
+            longitude: response.data.places[0].longitude
+          };
+        })
+        .catch(error => {
+          console.error('Error fetching ZIP code information:', error);
+        });
+    }
+  }
+});
+</script>
 
-    // Créez une instance du client avec le token d'accès
-    const restliClient = new RestliClient();
-
-    new Vue({
-      el: '#app',
-      data: {
-        profile: null,
-        error: null
-      },
-      methods: {
-        fetchLinkedInProfile() {
-          // Utilisez le client pour faire une requête GET vers le profil de l'utilisateur actuel
-          restliClient.get({
-            resourcePath: '/me',
-            accessToken: 'AQXOaHG3pcxZBZaWaco3aBoHMwGU4AJROw9rAQHTxEwCwXz1veDGXnZOQA9n42s9QhE7KEHe0tEB4l-kbqCJerNQM8nuc6NaimMYLhQ35k7Bb89zQ4eiYsLZE3TyrLWIOePipAwNqK5RIU-Hlij7LeVo8AQ_J-82gHstjUPd-geW5BxG0lZAIFor7IVR6GSEG6KD9Jn6NiQ9g4b-0mGs09iHeS8ouTEZigPIH9yCKN7gpOUD9be95DyNERnGOHLwB4QksxlNrbY9KuvI7M_HbvKTF9-W-tsD8h4Ok12_IeRC70M-ShQaf9xMdMI_GzpqPczuWjBO_yufDZwRWJXCCaq-t1MGhA' // Remplacez 'VOTRE_TOKEN_ICI' par votre vrai token d'accès
-          }).then(response => {
-            // Traitement de la réponse
-            this.profile = response.data;
-            this.error = null;
-          }).catch(error => {
-            // Gestion des erreurs
-            this.profile = null;
-            this.error = error.message || 'Unknown error';
-          });
-        }
-      }
-    });
-  </script>
 </body>
 </html>
