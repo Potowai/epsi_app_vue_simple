@@ -17,7 +17,7 @@
       align-items: center;
       justify-content: center;
       height: 100vh;
-      background-color: #e0f7fa;
+      background-color: var(--main-color);
     }
 
     #app {
@@ -29,14 +29,14 @@
     }
 
     h1 {
-      color: #01579b;
+      color: var(--main-color);
     }
 
     label {
       display: block;
       margin: 10px 0;
       font-weight: bold;
-      color: #01579b;
+      color: var(--main-color);
     }
 
     input {
@@ -44,12 +44,12 @@
       padding: 10px;
       margin: 5px 0 15px;
       box-sizing: border-box;
-      border: 1px solid #01579b;
+      border: 1px solid var(--main-color);
       border-radius: 4px;
     }
 
     button {
-      background-color: #0288d1;
+      background-color: var(--main-color) ;
       color: #fff;
       padding: 10px 15px;
       border: none;
@@ -58,7 +58,7 @@
     }
 
     button:hover {
-      background-color: #0277bd;
+      background-color: var(--main-color);
     }
 
     div {
@@ -66,7 +66,7 @@
     }
 
     h2 {
-      color: #01579b;
+      color: var(--main-color);
     }
 
     p {
@@ -82,8 +82,10 @@
 
 <div id="app">
   <h1>Informations sur le code postal</h1>
-  <label for="countryInput">Entrez le nom du pays :</label>
-  <input type="text" v-model="countryCode" id="countryInput">
+  <label for="countrySelect">Sélectionnez le pays :</label>
+  <select v-model="selectedCountry" id="countrySelect">
+    <option v-for="country in countries" :value="country.Code">{{ country.Country }}</option>
+  </select>
   <label for="zipCodeInput">Entrez le code postal :</label>
   <input type="text" v-model="zipCode" id="zipCodeInput">
   <button @click="getZipCodeInfo">Obtenir les informations</button>
@@ -102,13 +104,85 @@
 new Vue({
   el: '#app',
   data: {
+    selectedCountry: '',  
     countryCode: '',
+    countries: [{ Country: 'Andorra', Code: 'AD' },
+  { Country: 'Argentina', Code: 'AR' },
+  { Country: 'American Samoa', Code: 'AS' },
+  { Country: 'Austria', Code: 'AT' },
+  { Country: 'Australia', Code: 'AU' },
+  { Country: 'Bangladesh', Code: 'BD' },
+  { Country: 'Belgium', Code: 'BE' },
+  { Country: 'Bulgaria', Code: 'BG' },
+  { Country: 'Brazil', Code: 'BR' },
+  { Country: 'Canada', Code: 'CA' },
+  { Country: 'Switzerland', Code: 'CH' },
+  { Country: 'Czech Republic', Code: 'CZ' },
+  { Country: 'Germany', Code: 'DE' },
+  { Country: 'Denmark', Code: 'DK' },
+  { Country: 'Dominican Republic', Code: 'DO' },
+  { Country: 'Spain', Code: 'ES' },
+  { Country: 'Finland', Code: 'FI' },
+  { Country: 'Faroe Islands', Code: 'FO' },
+  { Country: 'France', Code: 'FR' },
+  { Country: 'Great Britain', Code: 'GB' },
+  { Country: 'French Guyana', Code: 'GF' },
+  { Country: 'Guernsey', Code: 'GG' },
+  { Country: 'Greenland', Code: 'GL' },
+  { Country: 'Guadeloupe', Code: 'GP' },
+  { Country: 'Guatemala', Code: 'GT' },
+  { Country: 'Guam', Code: 'GU' },
+  { Country: 'Guyana', Code: 'GY' },
+  { Country: 'Croatia', Code: 'HR' },
+  { Country: 'Hungary', Code: 'HU' },
+  { Country: 'Isle of Man', Code: 'IM' },
+  { Country: 'India', Code: 'IN' },
+  { Country: 'Iceland', Code: 'IS' },
+  { Country: 'Italy', Code: 'IT' },
+  { Country: 'Jersey', Code: 'JE' },
+  { Country: 'Japan', Code: 'JP' },
+  { Country: 'Liechtenstein', Code: 'LI' },
+  { Country: 'Sri Lanka', Code: 'LK' },
+  { Country: 'Lithuania', Code: 'LT' },
+  { Country: 'Luxembourg', Code: 'LU' },
+  { Country: 'Monaco', Code: 'MC' },
+  { Country: 'Moldavia', Code: 'MD' },
+  { Country: 'Marshall Islands', Code: 'MH' },
+  { Country: 'Macedonia', Code: 'MK' },
+  { Country: 'Northern Mariana Islands', Code: 'MP' },
+  { Country: 'Martinique', Code: 'MQ' },
+  { Country: 'Mexico', Code: 'MX' },
+  { Country: 'Malaysia', Code: 'MY' },
+  { Country: 'Holland', Code: 'NL' },
+  { Country: 'Norway', Code: 'NO' },
+  { Country: 'New Zealand', Code: 'NZ' },
+  { Country: 'Phillippines', Code: 'PH' },
+  { Country: 'Pakistan', Code: 'PK' },
+  { Country: 'Poland', Code: 'PL' },
+  { Country: 'Saint Pierre and Miquelon', Code: 'PM' },
+  { Country: 'Puerto Rico', Code: 'PR' },
+  { Country: 'Portugal', Code: 'PT' },
+  { Country: 'French Reunion', Code: 'RE' },
+  { Country: 'Russia', Code: 'RU' },
+  { Country: 'Sweden', Code: 'SE' },
+  { Country: 'Slovenia', Code: 'SI' },
+  { Country: 'Svalbard & Jan Mayen Islands', Code: 'SJ' },
+  { Country: 'Slovak Republic', Code: 'SK' },
+  { Country: 'San Marino', Code: 'SM' },
+  { Country: 'Thailand', Code: 'TH' },
+  { Country: 'Turkey', Code: 'TR' },
+  { Country: 'United States', Code: 'US' },
+  { Country: 'Vatican', Code: 'VA' },
+  { Country: 'Virgin Islands', Code: 'VI' },
+  { Country: 'Mayotte', Code: 'YT' },
+  { Country: 'South Africa', Code: 'ZA' }
+],
     zipCode: '',
     zipCodeInfo: null
   },
   methods: {
     getZipCodeInfo() {
-      const apiUrl = `http://api.zippopotam.us/${this.countryCode}/${this.zipCode}`;
+      const apiUrl = `http://api.zippopotam.us/${this.selectedCountry}/${this.zipCode}`;
       
       axios.get(apiUrl)
         .then(response => {
@@ -126,7 +200,7 @@ new Vue({
     },
     generateRandomColor() {
       const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
-      document.body.style.backgroundColor = randomColor;
+      document.body.style.setProperty('--main-color', randomColor);
     }
   },
   mounted() {
