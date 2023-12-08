@@ -1,41 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vue.js API Example</title>
-  <!-- Include Vue.js and Axios -->
+  <title>Exemple Vue.js avec API</title>
+  <!-- Inclure Vue.js et Axios -->
   <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+      font-family: 'Arial', sans-serif;
       margin: 0;
       padding: 0;
       display: flex;
       align-items: center;
       justify-content: center;
       height: 100vh;
+      background-color: #e0f7fa;
     }
 
     #app {
-      background-color: #fff;
+      background-color: #ffffff;
       border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
       padding: 20px;
       text-align: center;
     }
 
     h1 {
-      color: #333;
+      color: #01579b;
     }
 
     label {
       display: block;
       margin: 10px 0;
       font-weight: bold;
+      color: #01579b;
     }
 
     input {
@@ -43,12 +44,12 @@
       padding: 10px;
       margin: 5px 0 15px;
       box-sizing: border-box;
-      border: 1px solid #ccc;
+      border: 1px solid #01579b;
       border-radius: 4px;
     }
 
     button {
-      background-color: #4caf50;
+      background-color: #0288d1;
       color: #fff;
       padding: 10px 15px;
       border: none;
@@ -57,7 +58,7 @@
     }
 
     button:hover {
-      background-color: #45a049;
+      background-color: #0277bd;
     }
 
     div {
@@ -65,7 +66,7 @@
     }
 
     h2 {
-      color: #333;
+      color: #01579b;
     }
 
     p {
@@ -80,20 +81,20 @@
 <body>
 
 <div id="app">
-  <h1>ZIP Code Information</h1>
-  <label for="countryInput">Enter Country name:</label>
+  <h1>Informations sur le code postal</h1>
+  <label for="countryInput">Entrez le nom du pays :</label>
   <input type="text" v-model="countryCode" id="countryInput">
-  <label for="zipCodeInput">Enter ZIP Code:</label>
+  <label for="zipCodeInput">Entrez le code postal :</label>
   <input type="text" v-model="zipCode" id="zipCodeInput">
-  <button @click="getZipCodeInfo">Get Info</button>
+  <button @click="getZipCodeInfo">Obtenir les informations</button>
 
   <div v-if="zipCodeInfo">
-    <h2>Result:</h2>
-    <p><strong>Country:</strong> {{ zipCodeInfo.country }}</p>
-    <p><strong>State:</strong> {{ zipCodeInfo.state }}</p>
-    <p><strong>City:</strong> {{ zipCodeInfo.city }}</p>
-    <p><strong>Latitude:</strong> {{ zipCodeInfo.latitude }}</p>
-    <p><strong>Longitude:</strong> {{ zipCodeInfo.longitude }}</p>
+    <h2>Résultat :</h2>
+    <p><strong>Pays :</strong> {{ zipCodeInfo.country }}</p>
+    <p><strong>État :</strong> {{ zipCodeInfo.state }}</p>
+    <p><strong>Ville :</strong> {{ zipCodeInfo.city }}</p>
+    <p><strong>Latitude :</strong> {{ zipCodeInfo.latitude }}</p>
+    <p><strong>Longitude :</strong> {{ zipCodeInfo.longitude }}</p>
   </div>
 </div>
 
@@ -120,10 +121,18 @@ new Vue({
           };
         })
         .catch(error => {
-          console.error('Error fetching ZIP code information:', error);
+          console.error('Erreur lors de la récupération des informations du code postal :', error);
         });
+    },
+    generateRandomColor() {
+      const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+      document.body.style.backgroundColor = randomColor;
     }
-  }
+  },
+  mounted() {
+    // Générer une couleur aléatoire lors du chargement de la page
+    this.generateRandomColor();
+  },
 });
 </script>
 
