@@ -182,7 +182,7 @@ new Vue({
   },
   methods: {
     getZipCodeInfo() {
-      const apiUrl = `http://api.zippopotam.us/${this.selectedCountry}/${this.zipCode}`;
+      const apiUrl = `https://api.zippopotam.us/${this.selectedCountry}/${this.zipCode}`;
       
       axios.get(apiUrl)
         .then(response => {
